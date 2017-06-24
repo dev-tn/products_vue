@@ -1,12 +1,25 @@
 <template>
-  <div>
-    <h2>{{ pageHeading }}</h2>
-    <ul>
-     <li v-for="product in productlist" track-by="id">
-      {{ product.name }}
-    </li>
-  </ul>
-</div>
+  <table class="table table-hover product-table text-left">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="product in productlist" track-by="id">
+        <td>{{product.name}}</td>
+        <td>{{product.description}}</td>
+        <td>{{product.price}}:-</td>
+      </tr>
+      <tr v-if="!productlist.length">
+        <td colspan="4" class="p-y-3 text-xs-center">
+          <strong>You should add some products!</strong>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
@@ -28,9 +41,3 @@
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-</style>
