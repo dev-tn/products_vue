@@ -7,6 +7,7 @@
           <th>Name</th>
           <th>Description</th>
           <th>Price</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -14,6 +15,7 @@
           <td>{{product.name}}</td>
           <td>{{product.description}}</td>
           <td>{{product.price}}:-</td>
+          <td><a href="#" v-on:click.prevent.stop="onRemove(product)">remove</a></td>
         </tr>
         <tr v-if="!productlist.length">
           <td colspan="4" class="p-y-3 text-xs-center">
@@ -74,6 +76,15 @@
       },
       onEdit (product) {
         this.productInForm = product
+      },
+      onRemove (product) {
+        var _this = this
+        http.delete(`products/${product.id}`).then(function (response) {
+          if (response.ok) {
+            const index = _this.productlist.findIndex((p) => p.id === product.id)
+            _this.productlist.splice(index, 1)
+          }
+        })
       },
       resetProductInForm () {
         this.productInForm = initialData().productInForm
