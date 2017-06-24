@@ -30,7 +30,9 @@
 <script>
   import uuid from 'uuid'
   import { http } from 'vue'
+  import miniToastr from 'mini-toastr'
   import saveProductForm from './SaveProductForm'
+  miniToastr.init()// config can be passed here miniToastr.init(config)
 
   const initialData = () => {
     return {
@@ -65,11 +67,13 @@
         if (index !== -1) {
           http.put(`products/${product.id}`, product).then(function (response) {
             _this.productlist.splice(index, 1, response.body.data)
+            miniToastr.success('Product ' + response.body.data.name + ' Successfully Updated')
           })
         } else {
           product.id = uuid.v4()
           http.post('products', product).then(function (response) {
             _this.productlist.push(response.body.data)
+            miniToastr.success('New Product ' + response.body.data.name + ' Added')
           })
         }
         this.resetProductInForm()
@@ -83,6 +87,7 @@
           if (response.ok) {
             const index = _this.productlist.findIndex((p) => p.id === product.id)
             _this.productlist.splice(index, 1)
+            miniToastr.info('Product ' + product.name + ' Successfully Deleted')
           }
         })
       },
