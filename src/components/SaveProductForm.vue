@@ -26,7 +26,7 @@
     props: ['product'],
     methods: {
       onSubmit () {
-        console.log('submited value')
+        this.$emit('submit', this.product)
       }
     }
   }

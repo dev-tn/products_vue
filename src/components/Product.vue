@@ -1,6 +1,6 @@
 <template>
   <section>
-    <save-product-form :product="productInForm"></save-product-form>
+    <save-product-form :product="productInForm" v-on:submit="onFormSave"></save-product-form>
     <table class="table table-hover product-table text-left">
       <thead>
         <tr>
@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-      <tr v-for="product in productlist" track-by="id" v-on:click.prevent="onEdit(product)">
+        <tr v-for="product in productlist" track-by="id" v-on:click.prevent="onEdit(product)">
           <td>{{product.name}}</td>
           <td>{{product.description}}</td>
           <td>{{product.price}}:-</td>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+  import uuid from 'uuid'
   import { http } from 'vue'
   import saveProductForm from './SaveProductForm'
 
@@ -53,6 +54,23 @@
       })
     },
     methods: {
+      onFormSave (product) {
+        var _this = this
+        const index = this.productlist.findIndex((p) => p.id === product.id)
+        // update product if it exists or create it if it doesn't
+        if (index !== -1) {
+          http.put(`products/${product.id}`, product).then(function (response) {
+            console.log('Record Updated Clear form')
+            _this.productlist.splice(index, 1, response.body.data)
+          })
+        } else {
+          product.id = uuid.v4()
+          http.post('products', product).then(function (response) {
+            console.log('Record Saved Clear form')
+            _this.productlist.push(response.body.data)
+          })
+        }
+      },
       onEdit (product) {
         this.productInForm = product
       }
