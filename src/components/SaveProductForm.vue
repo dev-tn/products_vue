@@ -18,6 +18,7 @@
     <button type="submit" v-on:click.prevent="onSubmit" class="btn btn-primary">
       {{product.id ? 'Update' : 'Add'}} product
     </button>
+    <button type="submit" v-if="product.id" v-on:click.prevent="onCancel" class="btn btn-secondary">Cancel</button>
   </form>
 </template>
 
@@ -27,6 +28,9 @@
     methods: {
       onSubmit () {
         this.$emit('submit', this.product)
+      },
+      onCancel () {
+        this.$emit('cancel')
       }
     }
   }

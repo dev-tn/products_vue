@@ -1,6 +1,6 @@
 <template>
   <section>
-    <save-product-form :product="productInForm" v-on:submit="onFormSave"></save-product-form>
+    <save-product-form :product="productInForm" v-on:submit="onFormSave" v-on:cancel="resetProductInForm"></save-product-form>
     <table class="table table-hover product-table text-left">
       <thead>
         <tr>
@@ -30,23 +30,25 @@
   import { http } from 'vue'
   import saveProductForm from './SaveProductForm'
 
+  const initialData = () => {
+    return {
+      pageHeading: 'Product List',
+      productlist: [],
+      productInForm: {
+        id: null,
+        name: '',
+        description: '',
+        price: null
+      }
+    }
+  }
+
   export default {
     name: 'product',
     components: {
       saveProductForm
     },
-    data () {
-      return {
-        pageHeading: 'Product List',
-        productlist: [],
-        productInForm: {
-          id: null,
-          name: '',
-          description: '',
-          price: null
-        }
-      }
-    },
+    data: initialData,
     created () {
       var _this = this
       http.get('products').then(function (response) {
@@ -60,19 +62,21 @@
         // update product if it exists or create it if it doesn't
         if (index !== -1) {
           http.put(`products/${product.id}`, product).then(function (response) {
-            console.log('Record Updated Clear form')
             _this.productlist.splice(index, 1, response.body.data)
           })
         } else {
           product.id = uuid.v4()
           http.post('products', product).then(function (response) {
-            console.log('Record Saved Clear form')
             _this.productlist.push(response.body.data)
           })
         }
+        this.resetProductInForm()
       },
       onEdit (product) {
         this.productInForm = product
+      },
+      resetProductInForm () {
+        this.productInForm = initialData().productInForm
       }
     }
   }
