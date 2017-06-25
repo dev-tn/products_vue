@@ -13,7 +13,8 @@
     "mini-toastr": "^0.3.10",
     "uuid": "^3.0.0",
     "vue": "^2.1.0",
-    "vue-resource": "^1.0.3"
+    "vue-resource": "^1.0.3",
+    "vuex": "^2.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

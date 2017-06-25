@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import uuid from 'uuid'
   import { http } from 'vue'
   import miniToastr from 'mini-toastr'
@@ -37,7 +38,6 @@
   const initialData = () => {
     return {
       pageHeading: 'Product List',
-      productlist: [],
       productInForm: {
         id: null,
         name: '',
@@ -52,13 +52,10 @@
     components: {
       saveProductForm
     },
+    computed: mapGetters({
+      productlist: 'getProducts'
+    }),
     data: initialData,
-    created () {
-      var _this = this
-      http.get('products').then(function (response) {
-        _this.productlist = response.body.data
-      })
-    },
     methods: {
       onFormSave (product) {
         var _this = this

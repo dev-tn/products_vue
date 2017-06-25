@@ -12,6 +12,9 @@ export default {
   name: 'app',
   components: {
     product
+  },
+  created () {
+    this.$store.dispatch('fetchProducts')
   }
 }
 </script>
